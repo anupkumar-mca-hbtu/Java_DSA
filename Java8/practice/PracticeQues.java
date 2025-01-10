@@ -4,9 +4,7 @@ import com.sun.tools.javac.Main;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -92,6 +90,19 @@ class Employee {
     public void setYearOfJoining(int yearOfJoining) {
         this.yearOfJoining = yearOfJoining;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", department='" + department + '\'' +
+                ", yearOfJoining=" + yearOfJoining +
+                ", salary=" + salary +
+                '}';
+    }
 }
 
 public class PracticeQues {
@@ -153,11 +164,34 @@ public class PracticeQues {
              //  .forEach(emp.containsKey() +" " + emp.containsValue());
 
         System.out.println(emp);
-        logger.info(emp.toString());
-        try (FileWriter writer = new FileWriter("output.txt")) {
-            writer.write(emp.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        logger.info(emp.toString());
+//        try (FileWriter writer = new FileWriter("output.txt")) {
+//            writer.write(emp.toString());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        // 4. Get the details of highest paid employee in the organization ?
+       Optional<Employee> optional =employeeList.stream().max(Comparator.comparingDouble(Employee::getSalary));
+
+        Employee empl = optional.get();
+        System.out.println(empl.toString());
+
+
+        // 5. Get the names of all employees who have joined after 2015 ?
+
+        employeeList.stream()
+                .filter(e -> (e.getYearOfJoining()>2015))
+                .map(Employee::getName)
+                .forEach(System.out::println);
+
+          // 6. Count the number of employees in each department ?
+
+       Map<String,Long> mp= employeeList.stream().collect(Collectors.groupingBy(Employee :: getDepartment, Collectors.counting()));
+          System.out.println(mp);
+
+          // 7. What is the average salary of each department ?
+
+
     }
 }
