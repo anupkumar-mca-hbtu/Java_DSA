@@ -187,11 +187,57 @@ public class PracticeQues {
 
           // 6. Count the number of employees in each department ?
 
-       Map<String,Long> mp= employeeList.stream().collect(Collectors.groupingBy(Employee :: getDepartment, Collectors.counting()));
+       Map<String,Long> mp= employeeList.stream()
+               .collect(Collectors
+                       .groupingBy(Employee :: getDepartment, Collectors.counting()));
           System.out.println(mp);
 
           // 7. What is the average salary of each department ?
+                Map<String,Double> hm1= employeeList.stream()
+                        .collect(Collectors
+                                .groupingBy(Employee :: getDepartment , Collectors.averagingDouble(Employee :: getSalary)));
+
+                System.out.println(hm1);
+
+                // 8. Get the details of youngest male employee in the Development department ?
+//        Optional<Employee> optional1= employeeList.stream().min(Comparator.comparing(Employee :: getAge));
+//
+//        System.out.println(optional1.toString());
+
+        Optional<Employee> em1= employeeList.stream()
+                .filter(e -> e.getDepartment().equalsIgnoreCase("Development") && e.getGender().equalsIgnoreCase("Male"))
+                .min(Comparator.comparing(Employee::getAge));
+
+        em1.ifPresent(System.out::println);
+
+       //  9. Who has the most working experience in the organization ?
+
+        Optional<Employee> opt= employeeList.stream()
+                .min(Comparator.comparing(Employee::getYearOfJoining));
+
+        opt.ifPresent(System.out::println);
+
+     //   10. How many male and female employees are there in the Sales team ?
+       Map<String,Long> mp2= employeeList.stream()
+                .filter(e -> e.getDepartment().equalsIgnoreCase("Sales"))
+                .collect(Collectors.groupingBy(Employee::getGender,Collectors.counting()));
+
+       System.out.println(mp2);
+
+       // 11. What is the average salary of male and female employees ?
+
+        employeeList.stream()
+                .collect(Collectors.groupingBy(Employee::getGender, Collectors.averagingDouble(Employee::getSalary)))
+                        .forEach((gender,  avgSalary) ->
+                                System.out.println("Gender:" + gender + " Average_Salary:" +avgSalary));
+
+        // 12. List down the names of all employees in each department ?
+        List<String> ls= employeeList.stream().map(Employee::getName).toList();
+
+
+                System.out.println(ls);
 
 
     }
+
 }
