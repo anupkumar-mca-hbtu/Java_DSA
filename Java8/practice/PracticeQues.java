@@ -236,8 +236,38 @@ public class PracticeQues {
 
 
                 System.out.println(ls);
+                // 13. What is the average salary and total salary of the whole organization ?
+        DoubleSummaryStatistics stats = employeeList.stream()
+                .mapToDouble(Employee::getSalary)
+                .summaryStatistics();
 
+        System.out.println("Total Salary: " + stats.getSum());
+        System.out.println("Average Salary: " + stats.getAverage());
 
+// 14. Separate the employees who are younger or equal to 25 years
+//from those employees who are older than 25 years ?
+
+       // Partition employees based on age <= 25
+        Map<Boolean, List<Employee>> partitionedByAge = employeeList.stream()
+                .collect(Collectors.partitioningBy(emp5 -> emp5.getAge() <= 25));
+
+        // Employees younger or equal to 25 years
+        List<Employee> youngerOrEqual25 = partitionedByAge.get(true);
+        // Employees older than 25 years
+        List<Employee> olderThan25 = partitionedByAge.get(false);
+
+        System.out.println("Employees younger or equal to 25 years:");
+        youngerOrEqual25.forEach(System.out::println);
+
+        System.out.println("\nEmployees older than 25 years:");
+        olderThan25.forEach(System.out::println);
+
+        // 15. Who is the oldest employee in the organization?
+
+        Optional<Employee> emp6= employeeList.stream().max(Comparator.comparing(Employee::getAge));
+
+        System.out.println("oldest employee :");
+        emp6.ifPresent(System.out::println);
     }
 
 }
